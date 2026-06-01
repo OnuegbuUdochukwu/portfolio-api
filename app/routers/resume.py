@@ -58,5 +58,5 @@ async def download_resume_pdf():
     return FileResponse(
         PDF_PATH,
         media_type="application/pdf",
-        filename="Udochukwu_Onuegbu_Resume.pdf",
+        headers={"Content-Disposition": "inline; filename=\"Udochukwu_Onuegbu_Resume.pdf\""},
     )
