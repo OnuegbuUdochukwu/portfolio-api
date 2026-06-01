@@ -19,8 +19,12 @@ app.include_router(resume_router)
 
 @app.on_event("startup")
 async def startup():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+    except Exception as e:
+        print(f"WARNING: Database startup failed: {e}")
+        print("The app will still start, but DB-dependent endpoints will return errors.")
 
 
 @app.get("/health")
