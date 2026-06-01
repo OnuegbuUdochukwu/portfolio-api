@@ -1,12 +1,15 @@
+import os
+
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models import Experience, Education, Certification, Project
 from app.schemas import ResumeData, ExperienceSchema, EducationSchema, CertificationSchema, ProjectSchema
-from app.services import generate_pdf
+
+PDF_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "resume.pdf")
 
 router = APIRouter(prefix="/api/resume", tags=["resume"])
 
@@ -49,15 +52,11 @@ async def get_resume_data(db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/pdf")
-async def download_resume_pdf(db: AsyncSession = Depends(get_db)):
-    data = await _get_resume_data(db)
-    pdf_buf = generate_pdf(data)
-
-    return StreamingResponse(
-        pdf_buf,
+async def download_resume_pdf():
+    if not os.path.exists(PDF_PATH):
+        raise HTTPException(status_code=404, detail="Resume PDF not found")
+    return FileResponse(
+        PDF_PATH,
         media_type="application/pdf",
-        headers={
-            "Content-Disposition": 'attachment; filename="Udochukwu_Onuegbu_Resume.pdf"',
-            "Content-Type": "application/pdf",
-        },
+        filename="Udochukwu_Onuegbu_Resume.pdf",
     )
