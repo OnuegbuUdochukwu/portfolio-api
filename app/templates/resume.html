@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: A4;
+    margin: 1.8cm 2cm 1.8cm 2cm;
+  }
+
+  @page :first {
+    @top-left {
+      content: none;
+    }
+    @top-right {
+      content: none;
+    }
+    @bottom-center {
+      content: none;
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.5;
+    color: #1a1a1a;
+  }
+
+  .header {
+    margin-bottom: 1.2cm;
+  }
+
+  .header h1 {
+    font-size: 22pt;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 2px;
+  }
+
+  .header .title {
+    font-size: 12pt;
+    color: #1a7a3a;
+    margin-bottom: 4px;
+  }
+
+  .header .contact {
+    font-size: 9pt;
+    color: #555;
+  }
+
+  .header .contact span {
+    margin: 0 4px;
+  }
+
+  .section {
+    margin-bottom: 0.7cm;
+  }
+
+  .section-title {
+    font-size: 10pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #1a7a3a;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 3px;
+    margin-bottom: 8px;
+  }
+
+  .experience-item {
+    margin-bottom: 10px;
+  }
+
+  .experience-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .experience-header .company {
+    font-weight: 700;
+    font-size: 10.5pt;
+  }
+
+  .experience-header .period {
+    font-size: 9pt;
+    color: #777;
+  }
+
+  .experience-role {
+    font-size: 9.5pt;
+    color: #444;
+    margin-bottom: 3px;
+  }
+
+  .experience-desc {
+    font-size: 9pt;
+    color: #333;
+    margin-bottom: 3px;
+  }
+
+  ul {
+    padding-left: 16px;
+    margin-top: 2px;
+  }
+
+  li {
+    font-size: 9pt;
+    color: #333;
+    margin-bottom: 1px;
+  }
+
+  .edu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .edu-item .school {
+    font-weight: 700;
+    font-size: 10.5pt;
+  }
+
+  .edu-item .period {
+    font-size: 9pt;
+    color: #777;
+  }
+
+  .edu-degree {
+    font-size: 9.5pt;
+    color: #444;
+  }
+
+  .edu-details {
+    font-size: 9pt;
+    color: #555;
+    margin-top: 2px;
+  }
+
+  .cert-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .cert-item {
+    width: 50%;
+    font-size: 9pt;
+    margin-bottom: 3px;
+  }
+
+  .cert-item .name {
+    font-weight: 600;
+  }
+
+  .cert-item .issuer {
+    color: #666;
+    font-size: 8.5pt;
+  }
+
+  .skills p {
+    font-size: 9pt;
+    color: #333;
+    margin-bottom: 2px;
+  }
+
+  .project-item {
+    margin-bottom: 5px;
+  }
+
+  .project-item .name {
+    font-weight: 600;
+    font-size: 9.5pt;
+  }
+
+  .project-item .desc {
+    font-size: 9pt;
+    color: #555;
+  }
+
+  .project-item .lang {
+    font-size: 8pt;
+    color: #1a7a3a;
+  }
+
+  .blurb {
+    font-size: 9pt;
+    color: #444;
+    font-style: italic;
+    margin-bottom: 0.5cm;
+    padding: 6px 10px;
+    border-left: 3px solid #1a7a3a;
+    background: #f9f9f9;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>{{ data.name }}</h1>
+  <div class="title">{{ data.tagline }}</div>
+  <div class="contact">
+    {{ data.email }}<span>·</span>{{ data.phone }}<span>·</span>{{ data.location }}
+  </div>
+  <div class="contact">
+    {{ data.github }}<span>·</span>{{ data.linkedin }}
+  </div>
+</div>
+
+<div class="blurb">{{ data.blurb }}</div>
+
+{% if data.experiences %}
+<div class="section">
+  <div class="section-title">Experience</div>
+  {% for exp in data.experiences %}
+  <div class="experience-item">
+    <div class="experience-header">
+      <span class="company">{{ exp.company }}</span>
+      <span class="period">{{ exp.period }}</span>
+    </div>
+    <div class="experience-role">{{ exp.role }}{% if exp.type %} · {{ exp.type }}{% endif %}</div>
+    {% if exp.description %}<div class="experience-desc">{{ exp.description }}</div>{% endif %}
+    {% if exp.highlights %}
+    <ul>
+      {% for h in exp.highlights %}<li>{{ h }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if data.education %}
+<div class="section">
+  <div class="section-title">Education</div>
+  <div class="edu-item">
+    <span class="school">{{ data.education.school }}</span>
+    <span class="period">{{ data.education.period }}</span>
+  </div>
+  <div class="edu-degree">{{ data.education.degree }}{% if data.education.gpa %} · GPA: {{ data.education.gpa }}{% endif %}</div>
+  {% if data.education.details %}
+  <div class="edu-details">
+    <ul>
+      {% for d in data.education.details %}<li>{{ d }}</li>{% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+
+{% if data.certifications %}
+<div class="section">
+  <div class="section-title">Certifications</div>
+  <div class="cert-grid">
+    {% for cert in data.certifications %}
+    <div class="cert-item">
+      <div class="name">{{ cert.name }}</div>
+      <div class="issuer">{{ cert.issuer }}{% if cert.date %} · {{ cert.date }}{% endif %}</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<div class="section">
+  <div class="section-title">Skills</div>
+  <div class="skills">
+    <p><strong>Languages:</strong> Java, Python, TypeScript, JavaScript, C, C++, SQL</p>
+    <p><strong>Frameworks:</strong> Spring Boot, Flask, Express, React, Next.js</p>
+    <p><strong>Databases:</strong> PostgreSQL, SQLite</p>
+    <p><strong>DevOps:</strong> Docker, Git, HCL</p>
+  </div>
+</div>
+
+{% if data.projects %}
+<div class="section">
+  <div class="section-title">Projects</div>
+  {% for proj in data.projects %}
+  <div class="project-item">
+    <div class="name">{{ proj.name }} <span class="lang">{{ proj.language }}</span></div>
+    <div class="desc">{{ proj.description }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div style="margin-top: 1cm; font-size: 8pt; color: #999; text-align: center;">
+  Generated from portfolio-api · Last updated {{ data.last_updated }}
+</div>
+
+</body>
+</html>
