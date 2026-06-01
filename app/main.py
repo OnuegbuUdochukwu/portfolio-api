@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.database import engine, Base
+from app.database import engine
+from app.models import Base
 from app.routers.resume import router as resume_router
 
 app = FastAPI(title="Portfolio API", version="0.1.0")

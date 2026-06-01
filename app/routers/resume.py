@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models import Experience, Education, Certification, Project
 from app.schemas import ResumeData, ExperienceSchema, EducationSchema, CertificationSchema, ProjectSchema
-from app.services.pdf import generate_pdf
+from app.services import generate_pdf
 
 router = APIRouter(prefix="/api/resume", tags=["resume"])
 
