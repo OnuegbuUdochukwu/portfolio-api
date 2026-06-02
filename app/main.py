@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine
 from app.models import Base
 from app.routers.resume import router as resume_router
+from app.routers.leetcode import router as leetcode_router
 
 app = FastAPI(title="Portfolio API", version="0.1.0")
 
@@ -15,6 +16,7 @@ app.add_middleware(
 )
 
 app.include_router(resume_router)
+app.include_router(leetcode_router)
 
 
 @app.on_event("startup")
