@@ -43,6 +43,21 @@ class ProjectSchema(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class TrendingPostSchema(BaseModel):
+    id: int
+    hn_id: str
+    title: str
+    url: str | None = None
+    points: int = 0
+    comment_count: int = 0
+    author: str | None = None
+    created_at: str | None = None
+    scraped_at: str | None = None
+    topic_tags: list[str] = []
+
+    model_config = {"from_attributes": True}
+
+
 class ResumeData(BaseModel):
     name: str
     email: str

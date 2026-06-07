@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ARRAY, Float, DateTime, func
+from sqlalchemy import Column, Integer, String, Text, ARRAY, Float, DateTime, func, Boolean
 from sqlalchemy.orm import DeclarativeBase
 
 
@@ -53,3 +53,19 @@ class Project(Base):
     github_url = Column(String(500), nullable=True)
     category = Column(String(100), nullable=True)
     sort_order = Column(Integer, default=0)
+
+
+class TrendingPost(Base):
+    __tablename__ = "trending_posts"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    hn_id = Column(String(50), unique=True, nullable=False)
+    title = Column(String(500), nullable=False)
+    url = Column(String(1000), nullable=True)
+    points = Column(Integer, default=0)
+    comment_count = Column(Integer, default=0)
+    author = Column(String(100), nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=True)
+    scraped_at = Column(DateTime(timezone=True), server_default=func.now())
+    topic_tags = Column(ARRAY(String(100)), nullable=True)
+    is_visible = Column(Boolean, default=True)
