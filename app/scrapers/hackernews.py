@@ -8,6 +8,7 @@ from sqlalchemy import select
 from app.database import async_session
 from app.models import TrendingPost
 
+SOURCE = "hackernews"
 HN_API = "https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=30"
 
 BACKEND_KEYWORDS = [
@@ -69,9 +70,12 @@ async def scrape_and_persist(max_pages: int = 1) -> int:
     async with async_session() as session:
         saved = 0
         for hit in matched_hits:
-            hn_id = str(hit["objectID"])
+            source_id = str(hit["objectID"])
             existing = await session.execute(
-                select(TrendingPost).where(TrendingPost.hn_id == hn_id)
+                select(TrendingPost).where(
+                    TrendingPost.source == SOURCE,
+                    TrendingPost.source_id == source_id,
+                )
             )
             row = existing.scalar_one_or_none()
 
@@ -95,7 +99,8 @@ async def scrape_and_persist(max_pages: int = 1) -> int:
             else:
                 session.add(
                     TrendingPost(
-                        hn_id=hn_id,
+                        source=SOURCE,
+                        source_id=source_id,
                         title=hit["title"],
                         url=hit.get("url"),
                         points=hit.get("points", 0),

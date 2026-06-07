@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ARRAY, Float, DateTime, func, Boolean
+from sqlalchemy import Column, Integer, String, Text, ARRAY, Float, DateTime, func, Boolean, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase
 
 
@@ -57,9 +57,13 @@ class Project(Base):
 
 class TrendingPost(Base):
     __tablename__ = "trending_posts"
+    __table_args__ = (
+        UniqueConstraint("source", "source_id", name="uq_trending_source_source_id"),
+    )
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    hn_id = Column(String(50), unique=True, nullable=False)
+    source_id = Column(String(100), nullable=False)
+    source = Column(String(20), nullable=False)
     title = Column(String(500), nullable=False)
     url = Column(String(1000), nullable=True)
     points = Column(Integer, default=0)

@@ -45,7 +45,8 @@ class ProjectSchema(BaseModel):
 
 class TrendingPostSchema(BaseModel):
     id: int
-    hn_id: str
+    source_id: str
+    source: str
     title: str
     url: str | None = None
     points: int = 0
